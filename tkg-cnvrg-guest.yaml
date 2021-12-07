@@ -1,0 +1,25 @@
+apiVersion: run.tanzu.vmware.com/v1alpha1      #TKG API endpoint
+kind: TanzuKubernetesCluster                   #required parameter
+metadata:
+  name: cnvrg-tkc                       #cluster name, user defined
+  namespace: cnvrg                       #supervisor namespace
+spec:
+  distribution:
+    version: 1.19.7+vmware.1-tkg.1.fc82c41            #resolved kubernetes version
+  topology:
+    controlPlane:
+      count: 1                                 #number of control plane nodes
+      class: guaranteed-2xlarge                 #vmclass for control plane nodes
+      storageClass: tanzu-storage-policy         #storageclass for control pl
+    workers:
+      count: 3                                 #number of worker nodes
+      class: guaranteed-2xlarge                 #vmclass for worker nodes
+      storageClass: tanzu-storage-policy         #storageclass for worker nodes
+      volumes:
+        - name: containerd
+          mountPath: /var/lib/containerd
+          capacity:
+            storage: 80Gi
+  settings:
+    storage:
+      defaultClass: tanzu-storage-policy
